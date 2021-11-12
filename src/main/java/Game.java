@@ -23,21 +23,17 @@ public class Game {
             TerminalSize terminalSize = new TerminalSize(width, height);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
             Terminal terminal = terminalFactory.createTerminal();
-            //terminal = new DefaultTerminalFactory().createTerminal();
             screen = new TerminalScreen(terminal);
             screen.setCursorPosition(null); // we don't need a cursor
             screen.startScreen(); // screens must be started
             screen.doResizeIfNecessary(); // resize screen if necessary
-            arena = new Arena (height-1, width-1, hero, screen.newTextGraphics());
+            arena = new Arena (height, width, hero, screen.newTextGraphics());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public void draw() throws IOException {
         screen.clear();
-        TextGraphics graphics = screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
