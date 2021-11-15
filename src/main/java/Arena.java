@@ -10,6 +10,8 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class Arena {
     private int height;
@@ -17,12 +19,14 @@ public class Arena {
     private Hero hero;
     private TextGraphics graphics;
     private List<Wall> walls;
+    private List<Coin> coins;
     public Arena(int height, int width, Hero hero, TextGraphics graphics) {
         this.height = height;
         this.width = width;
         this.hero = hero;
         this.graphics = graphics;
         this.walls = createWalls();
+        this.coins = createCoins();
     }
 
     public void draw(TextGraphics graphics) {
@@ -31,6 +35,8 @@ public class Arena {
         hero.draw(graphics);
         for (Wall wall : walls)
             wall.draw(graphics);
+        for (Coin coin : coins)
+            coin.draw(graphics);
     }
 
     public boolean canHeroMove(Position position) {
@@ -54,6 +60,16 @@ public class Arena {
     private void moveHero(Position position) {
         if (canHeroMove(position))
             hero.setPosition(position);
+        retrieveCoins();
+    }
+
+    public void retrieveCoins() {
+        for(int i = 0; i < coins.size(); i++) {
+            if (hero.getPosition().equals(coins.get(i).getPosition())) {
+                coins.remove(i);
+                draw(graphics);
+            }
+        }
     }
 
     public void processKey(KeyStroke key) throws IOException {
@@ -83,5 +99,19 @@ public class Arena {
             walls.add(new Wall(width - 1, r));
         }
         return walls;
+    }
+
+    private List<Coin> createCoins() {
+        Random random = new Random();
+        ArrayList<Coin> coins = new ArrayList<>();
+        int x, y;
+        for (int i = 0; i < 5; i++) {
+            do{
+                x = random.nextInt(width - 2) +  1;
+                y = random.nextInt(height - 2) + 1;
+            } while(new Position(x, y).equals(hero.getPosition()));
+            coins.add(new Coin(x, y));
+        }
+        return coins;
     }
 }
