@@ -44,7 +44,7 @@ public class Arena {
             return false;
         for (int i = 0; i < walls.size(); i++) {
             Wall wall = walls.get(i);
-            if (position.getX() == wall.getPosition().getX() && position.getY() == wall.getPosition().getY()){
+            if (wall.getPosition().equals(position)){
                 return false;
             }
         }
