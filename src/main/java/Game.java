@@ -47,6 +47,17 @@ public class Game {
             draw();
             KeyStroke key = screen.readInput();
             arena.processKey(key);
+            if (arena.verifyMonsterCollision()) {
+                System.out.println("You lost.");
+                draw();
+                while (game) {
+                    key = screen.readInput();
+                    if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+                        screen.close();
+                        game = false;
+                    }
+                }
+            }
             if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                 screen.close();
             }
